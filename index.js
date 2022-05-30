@@ -9,37 +9,61 @@ function Book(name, author, type) {
 
 function Display() {}
 
-// Adding methods to display prototype  
-
+// Adding methods to display prototype
 // Adding Books to Your Books Section
 Display.prototype.add = function (book) {
-    console.log("Adding to UI");
-    tableBody = document.getElementById('tableBody');
-    let uiString = `<tr>
+  console.log("Adding to UI");
+  tableBody = document.getElementById("tableBody");
+  let uiString = `<tr>
     <td>${book.name}</td>
     <td>${book.author}</td>
     <td>${book.type}</td>
     </tr>`;
-    tableBody.innerHTML += uiString;
-}
-
-// Resets the form
-Display.prototype.clear = function (){
-    let libraryForm = document.getElementById('libraryForm');
-    libraryForm.reset();
-
-
-}
+  tableBody.innerHTML += uiString;
+};
 
 // Reseting when the form when submitted
-Display.prototype.clear = function (){
-    const libraryForm = document.getElementById("libraryForm");
-    libraryForm.reset();
+// Implement the clear function
+Display.prototype.clear = function () {
+  const libraryForm = document.getElementById("libraryForm");
+  libraryForm.reset();
+};
 
-}
+// Implement the validate Function  function
 
+Display.prototype.validate = function (book) {
+  if (book.name.length < 2 || book.author.length < 2) {
+    return false;
+  } else {
+    return true;
+  }
+};
 
-
+// Implement the SHOW Function  function
+Display.prototype.show = function (type, displayMessage) {
+  let message = document.getElementById("message");
+  if (type === "Success") {
+    message.innerHTML = `<div class="alert alert-${type} alert-success" role="alert">
+                <strong>Success:</strong> ${displayMessage}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+                </button>
+            </div>`;
+    setTimeout(function () {
+      message.innerHTML = "";
+    }, 3000);
+  } else {
+             message.innerHTML = `<div class="alert alert-${type} alert-danger" role="alert">
+             <strong>Error:</strong> ${displayMessage}
+             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+             <span aria-hidden="true">×</span>
+            </button>
+        </div>`;
+        setTimeout(function () {
+      message.innerHTML = "";
+    }, 4000);
+  }
+};
 
 //Add SUBMIT EVENT LISTNER TO FORM
 
@@ -68,16 +92,22 @@ libraryForm.addEventListener(
     } else if (cooking.checked) {
       type = cooking.value;
     }
-    //<----------------book object----------------------> 
+    //<----------------book object---------------------->
     let book = new Book(name, author, type);
     console.log(book);
 
     // <----------------Display Object  -------------------->
 
     let display = new Display();
-    display.add(book);
-    display.clear(book);
 
+    // validate  book object
+    if (display.validate(book)) {
+      display.add(book);
+      display.clear();
+      display.show("Success", "Book added Succesfully");
+    } else {
+      display.show("Error", "You cannot add this book");
+    }
     e.preventDefault();
   })
 );
