@@ -61,7 +61,7 @@ Display.prototype.show = function (type, displayMessage) {
         </div>`;
         setTimeout(function () {
       message.innerHTML = "";
-    }, 4000);
+    }, 3000);
   }
 };
 
